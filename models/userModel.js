@@ -1,51 +1,47 @@
-import mongoose from "mongoose";
-import validator from "validator";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import mongoose from 'mongoose';
+import validator from 'validator';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const userScheme = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please provide a user name"],
+    required: [true, 'Please provide a user name'],
     minlength: 3,
     maxlength: 25,
     trim: true,
   },
   email: {
     type: String,
-    required: [true, "Please provide an email"],
+    required: [true, 'Please provide an email'],
     unique: true,
     validate: {
       validator: validator.isEmail,
-      message: "Please provide a valid email",
+      message: 'Please provide a valid email',
     },
   },
   password: {
     type: String,
-    required: [true, "Please provide a password"],
+    required: [true, 'Please provide a password'],
     minlength: 8,
     select: false,
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Please confirm your password"],
+    required: [true, 'Please confirm your password'],
     validate: {
       validator: function (el) {
         return el === this.password;
       },
-      message: "Passwords are not the same!",
+      message: 'Passwords are not the same!',
     },
   },
-  resources: [{ type: String }],
-  subscribedTo: { type: String, default: "null" },
-  costperband : {
-    type:Number,
-    required: [true, "Please enter the cost per bandwidth"],
-  }
+  resources: [{ type: String, default: [] }],
+  subscribedTo: { type: String, default: 'null' },
 });
 
-userScheme.pre("save", async function () {
-  if (!this.isModified("password")) return;
+userScheme.pre('save', async function () {
+  if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   this.passwordConfirm = undefined;
@@ -62,4 +58,4 @@ userScheme.methods.checkPassword = async function (candidatePassword) {
   return check;
 };
 
-export default mongoose.model("User", userScheme);
+export default mongoose.model('User', userScheme);
