@@ -1,17 +1,17 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import validator from "validator";
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import validator from 'validator';
 
 const providerSchema = new mongoose.Schema({
-  name: { type: String, required: [true, "Please provide a user name"] },
+  name: { type: String, required: [true, 'Please provide a user name'] },
   cost: { type: Number, required: true },
   sales: { type: Number, default: 0 },
   response_time: { type: Number, required: true },
   network_bandwidth: { type: Number, required: true },
   available_VM: { type: Number },
   total_VM: { type: Number, required: true },
-  max_vm_configure : { type: String},
+  max_vm_configure: { type: String },
   security_management: { type: String },
   flexibility: { type: String },
   cpu_capacity: { type: String },
@@ -24,39 +24,43 @@ const providerSchema = new mongoose.Schema({
   scale_down_time: { type: String },
   auto_scaling: { type: String },
   storage: { type: String },
-  min_storage: {type: String},
-  min_bandwidth: {type: String},
-  max_bandwidth: {type: String},
-  max_storage: {type: String},
+  min_storage: { type: String },
+  min_bandwidth: { type: String },
+  max_bandwidth: { type: String },
+  max_storage: { type: String },
   email: {
     type: String,
-    required: [true, "Please provide an email"],
+    required: [true, 'Please provide an email'],
     unique: true,
     validate: {
       validator: validator.isEmail,
-      message: "Please provide a valid email",
+      message: 'Please provide a valid email',
     },
   },
   password: {
     type: String,
-    required: [true, "Please provide a password"],
+    required: [true, 'Please provide a password'],
     minlength: 8,
     select: false,
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Please confirm your password"],
+    required: [true, 'Please confirm your password'],
     validate: {
       validator: function (el) {
         return el === this.password;
       },
-      message: "Passwords are not the same!",
+      message: 'Passwords are not the same!',
     },
+  },
+  costperband: {
+    type: Number,
+    required: [true, 'Please enter the cost per bandwidth'],
   },
 });
 
-providerSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
+providerSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   this.passwordConfirm = undefined;
@@ -73,4 +77,4 @@ providerSchema.methods.checkPassword = async function (candidatePassword) {
   return check;
 };
 
-export default mongoose.model("Provider", providerSchema);
+export default mongoose.model('Provider', providerSchema);
