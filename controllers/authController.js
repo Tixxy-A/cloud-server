@@ -33,6 +33,7 @@ const signup = async (req, res, next) => {
     status: StatusCodes.CREATED,
     data: {
       user: {
+        _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
         resources: newUser.resources,
