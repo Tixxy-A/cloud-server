@@ -36,8 +36,9 @@ const signup = async (req, res, next) => {
         name: newUser.name,
         email: newUser.email,
         resources: newUser.resources,
-        token,
+        subscribedTo: newUser.subscribedTo,
       },
+      token,
       message: 'User registered',
     },
   });

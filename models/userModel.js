@@ -37,7 +37,7 @@ const userScheme = new mongoose.Schema({
     },
   },
   resources: [{ type: String, default: [] }],
-  subscribedTo: { type: String, default: 'null' },
+  subscribedTo: { type: String, default: null },
 });
 
 userScheme.pre('save', async function () {
