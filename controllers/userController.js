@@ -107,10 +107,10 @@ export const updateResources = async (req, res, next) => {
   });
 };
 
-export const getProviderDetails = (req, res, next) => {
+export const getProviderDetails = async (req, res, next) => {
   const { id } = req.params;
 
-  const provider = Provider.findById(id);
+  const provider = await Provider.findById(id);
 
   res.status(StatusCodes.OK).json({
     status: StatusCodes.OK,
