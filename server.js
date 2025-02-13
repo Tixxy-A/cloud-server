@@ -28,13 +28,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   })
 );
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/provider", providerRouter);
-app.use("/api/v1/admin", adminRouter);
-app.use("/api/v1/user", userRouter);
-app.use(notFoundMiddleware);
-app.use(errorHandlerMiddleware);
-
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL)
@@ -52,3 +45,11 @@ const start = async () => {
 };
 
 start();
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/provider", providerRouter);
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/user", userRouter);
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
+
+
